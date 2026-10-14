@@ -1,0 +1,161 @@
+[
+  {
+    "model": "arrhythmia_hgb_5class",
+    "class_scheme": "AAMI 5-class (N/S/V/F/Q), grouped from the 13-class MIT-BIH labels",
+    "data_source": "MIT-BIH Arrhythmia Database (PhysioNet), real per-beat features",
+    "is_synthetic_fallback": false,
+    "n_records_total": 109494,
+    "accuracy": 0.9404,
+    "precision_weighted": 0.9474,
+    "recall_weighted": 0.9404,
+    "f1_weighted": 0.943,
+    "macro_recall": 0.8363,
+    "macro_precision": 0.7332,
+    "macro_f1": 0.7768,
+    "per_class": {
+      "F": {
+        "precision": 0.3915,
+        "recall": 0.6273,
+        "f1": 0.4821,
+        "support": 161
+      },
+      "N": {
+        "precision": 0.9816,
+        "recall": 0.953,
+        "f1": 0.9671,
+        "support": 18126
+      },
+      "Q": {
+        "precision": 0.8789,
+        "recall": 0.9248,
+        "f1": 0.9013,
+        "support": 1609
+      },
+      "S": {
+        "precision": 0.6382,
+        "recall": 0.7806,
+        "f1": 0.7023,
+        "support": 556
+      },
+      "V": {
+        "precision": 0.7756,
+        "recall": 0.8956,
+        "f1": 0.8313,
+        "support": 1447
+      }
+    },
+    "n_train": 87595,
+    "n_test": 21899,
+    "features": [
+      "heart_rate",
+      "qrs_duration",
+      "pr_interval",
+      "qt_interval",
+      "qtc_bazett",
+      "rr_ratio",
+      "p_wave",
+      "t_wave"
+    ],
+    "notes": "109494 real annotated heartbeats across 13 classes, extracted via wfdb. See ml/data/arrhythmia_classes.json for class names. Trained on the AAMI 5-class grouping with soft-balanced sample weights, not the raw 13-class labels."
+  },
+  {
+    "model": "heart_disease_rf",
+    "data_source": "UCI Heart Failure Prediction (Cleveland/Hungary/Switzerland/VA + Statlog merge)",
+    "is_synthetic_fallback": false,
+    "n_records_total": 918,
+    "roc_auc": 0.9154,
+    "accuracy": 0.8533,
+    "precision": 0.8788,
+    "recall": 0.8529,
+    "f1": 0.8657,
+    "n_train": 734,
+    "n_test": 184,
+    "features": [
+      "Age",
+      "RestingBP",
+      "Cholesterol",
+      "FastingBS",
+      "MaxHR",
+      "Oldpeak",
+      "Sex_M",
+      "ChestPainType_ATA",
+      "ChestPainType_NAP",
+      "ChestPainType_TA",
+      "RestingECG_Normal",
+      "RestingECG_ST",
+      "ExerciseAngina_Y",
+      "ST_Slope_Flat",
+      "ST_Slope_Up"
+    ],
+    "notes": "918 real patient records. Download CDC BRFSS 2015 (253,680 rows) and set QTI_BRFSS_CSV for full 10k+ scale training. Default 0.5 threshold used (tested against recall-tuning; default gave both higher accuracy and higher recall on this roughly-balanced dataset)."
+  },
+  {
+    "model": "stroke_rf",
+    "data_source": "CDC NHANES 2005-2006, 2007-2008, 2009-2010, 2011-2012, 2013-2014, 2015-2016, 2017-2020 (7 cycles), real lab-measured glucose/BMI/cholesterol + measured-BP-derived hypertension",
+    "is_synthetic_fallback": false,
+    "n_records_total": 43346,
+    "decision_threshold": 0.4937,
+    "target_recall": 0.78,
+    "roc_auc": 0.8032,
+    "accuracy": 0.6978,
+    "precision": 0.0999,
+    "recall": 0.7812,
+    "f1": 0.1771,
+    "accuracy_at_default_0.5": 0.7046,
+    "recall_at_default_0.5": 0.7756,
+    "precision_at_0.75_target": {
+      "reachable": true,
+      "threshold": 0.9227,
+      "precision": 1.0,
+      "recall": 0.0028,
+      "accuracy": 0.9585
+    },
+    "n_train": 34676,
+    "n_test": 8670,
+    "features": [
+      "age",
+      "sex",
+      "bmi",
+      "cholesterol",
+      "heart_disease",
+      "smoking",
+      "diabetes",
+      "bmi_diabetes",
+      "age_heart_disease",
+      "age_smoking",
+      "age_bmi",
+      "waist_circumference_hypertension",
+      "physical_activity_bmi"
+    ],
+    "dropped_missing_flag_columns": [
+      "bmi_was_missing",
+      "avg_glucose_level_was_missing",
+      "cholesterol_was_missing",
+      "hypertension_was_missing",
+      "heart_disease_was_missing",
+      "smoking_was_missing",
+      "physical_activity_was_missing",
+      "diabetes_was_missing",
+      "hba1c_was_missing",
+      "waist_circumference_was_missing",
+      "avg_glucose_level",
+      "hypertension",
+      "physical_activity",
+      "hba1c",
+      "waist_circumference",
+      "age_hypertension",
+      "glucose_hba1c",
+      "bmi_waist_circumference",
+      "cholesterol_hypertension",
+      "sex_age"
+    ],
+    "hyperparameters": {
+      "max_depth": 3,
+      "learning_rate": 0.05,
+      "min_samples_leaf": 10,
+      "l2_regularization": 1.0
+    },
+    "hyperparameter_search_val_auc": 0.8071,
+    "notes": "43346 real participant records, 1805 stroke-positive (4.16%). Built via ml/download_nhanes.py + ml/extract_nhanes_features.py; see ML_MODELS_EXPLAINED.md and ml/DATASETS.md for full provenance. Honest expectation: stroke is a rare event even in a national survey sample (typically well under 5% positive here), so at high precision thresholds recall will still be limited by class imbalance -- NHANES's advantage over BRFSS/Kaggle is that its glucose/BMI/cholesterol are lab-measured rather than self-reported/binary, which should sharpen the precision-recall curve at a given operating point, not eliminate the fundamental rare-event ceiling. Compare against cardiac_evaluation_report.json's prior BRFSS/Kaggle runs before treating any single metric improvement as conclusive. Includes engineered comorbidity interaction features: round 1 (age_hypertension, bmi_diabetes, glucose_hba1c, age_heart_disease) and round 2 (bmi_waist_circumference, age_smoking, cholesterol_hypertension, age_bmi, sex_age, waist_circumference_hypertension, physical_activity_bmi). Threshold tuned to guarantee >= 78% recall. Hyperparameters tuned specifically for stroke (previously copy-pasted from heart_disease_rf, now round-2 widened grid incl. l2_regularization); 20 low-value columns dropped via permutation importance (10 candidate missing-flags + 23 candidate non-flag features screened)."
+  }
+]

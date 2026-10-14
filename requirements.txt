@@ -1,0 +1,26 @@
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.5
+python-dotenv>=1.0
+requests>=2.31
+
+# ML
+scikit-learn>=1.4
+pandas>=2.1
+numpy>=1.26
+scipy>=1.11
+joblib>=1.3
+
+# Real MIT-BIH/PTB-XL ECG signal parsing (arrhythmia model) — only needed
+# when downloading/extracting real arrhythmia data via ml/download_mitbih.py
+# and ml/extract_arrhythmia_features.py; training still works without it
+# using the synthetic fallback.
+wfdb>=4.1
+
+# Desktop wrapper
+pywebview>=4.4
+
+# Multilingual Gemini Live voice assistant — only needed if GEMINI_API_KEY
+# is set in backend/.env; the app runs fine without it (text assistant
+# fallback is always available).
+google-genai>=0.3

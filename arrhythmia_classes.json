@@ -1,0 +1,15 @@
+{
+  "0": "Normal",
+  "1": "Left bundle branch block",
+  "2": "Right bundle branch block",
+  "3": "Atrial premature",
+  "4": "Nodal (junctional) premature",
+  "5": "Supraventricular premature",
+  "6": "Premature ventricular contraction",
+  "7": "Fusion (ventricular+normal)",
+  "8": "Atrial escape",
+  "9": "Nodal (junctional) escape",
+  "10": "Ventricular escape",
+  "11": "Paced / fusion-paced",
+  "12": "Unclassifiable / other"
+}
